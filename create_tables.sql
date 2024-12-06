@@ -10,10 +10,13 @@ CREATE TABLE Users (
 CREATE TABLE Passwords (
     password_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INT,
-    password_plain TEXT NOT NULL, -- Storing plain password
+    password_plain TEXT NOT NULL, -- Storing plain password is insecure
+    website_id INT, 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES Users(user_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (website_id) REFERENCES Websites(website_id)
 );
+
 
 -- Websites table (unchanged)
 CREATE TABLE Websites (

@@ -193,16 +193,25 @@ def createTable(_conn):
 #         print(e)
     
 #     print("++++++++++++++++++++++++++++++++++")
+# 
 
-
-def populateTable(_conn):
-    print("++++++++++++++++++++++++++++++++++")
-    print("Populate table")
-    
-    cur = _conn.cursor()
-    
-    _conn.commit()
-    print("++++++++++++++++++++++++++++++++++")
+def createAccount(conn):
+    username = input("Enter a new username: ")
+    try:
+        conn.execute("INSERT INTO Users (username) VALUES (?)", (username,))
+        conn.commit()
+        print("User added successfully!")
+    except sqlite3.IntegrityError:
+        print("Username already exists!")
+        
+def login(conn):
+    username = input("Enter a new username: ")
+    try:
+        conn.execute("INSERT INTO Users (username) VALUES (?)", (username,))
+        conn.commit()
+        print("User added successfully!")
+    except sqlite3.IntegrityError:
+        print("Username already exists!")
 
 
 def main():

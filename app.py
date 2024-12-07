@@ -209,8 +209,30 @@ def main():
     database = r"Checkpoint3-dbase.db"
     # create a database connection
     conn = openConnection(database)
-    with conn:
-        createTable(conn)
+    #createTable(conn)
+    
+    while True:
+        print("1. Log in")
+        print("2. Create a new account")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            login(conn)
+        elif choice == '2':
+            createAccount(conn)
+        else:
+            print("Invalid choice. Please try again.")
+
+    
+    while True:
+        print("\nPassword Manager")
+        print("1. Add User")
+        print("2. Add Website")
+        print("3. Save Password")
+        print("4. Retrieve Password")
+        print("5. Exit")
+        choice = input("Enter your choice: ")
 
     closeConnection(conn, database)
 

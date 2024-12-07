@@ -1,4 +1,4 @@
-INSERT INTO Users (username, email, created_at) VALUES 
+INSERT INTO users (username, email, created_at) VALUES
 ('alice_w', 'alice_w@example.com', '2024-01-01'),
 ('bob_d', 'bob_d@example.com', '2024-01-02'),
 ('carla_r', 'carla_r@example.com', '2024-01-03'),
@@ -8,9 +8,41 @@ INSERT INTO Users (username, email, created_at) VALUES
 ('grace_k', 'grace_k@example.com', '2024-01-07'),
 ('hank_l', 'hank_l@example.com', '2024-01-08'),
 ('ivy_m', 'ivy_m@example.com', '2024-01-09'),
-('jack_o', 'jack_o@example.com', '2024-01-10');
+('jack_o', 'jack_o@example.com', '2024-01-10'),
+('lucas_p', 'lucas_p@example.com', '2024-02-01'),
+('sophia_l', 'sophia_l@example.com', '2024-02-02'),
+('mike_r', 'mike_r@example.com', '2024-02-03'),
+('emily_c', 'emily_c@example.com', '2024-02-04'),
+('jason_k', 'jason_k@example.com', '2024-02-05'),
+('olivia_d', 'olivia_d@example.com', '2024-02-06'),
+('ryan_t', 'ryan_t@example.com', '2024-02-07'),
+('amelia_m', 'amelia_m@example.com', '2024-02-08'),
+('noah_v', 'noah_v@example.com', '2024-02-09'),
+('emma_n', 'emma_n@example.com', '2024-02-10');
 
-INSERT INTO Websites (website_name, website_url) VALUES 
+INSERT INTO pass (user_id, m_pass, created_at) VALUES
+(1, 'masterpassword123', '2024-01-01'),
+(2, 'mypassword456', '2024-01-02'),
+(3, 'securepass789', '2024-01-03'),
+(4, 'mypassword111', '2024-01-04'),
+(5, 'password987', '2024-01-05'),
+(6, 'letmein222', '2024-01-06'),
+(7, 'trustnoone333', '2024-01-07'),
+(8, 'complexpass444', '2024-01-08'),
+(9, 'easytoforget555', '2024-01-09'),
+(10, 'backup777', '2024-01-10'),
+(11, 'lucasMasterPass123', '2024-02-01'),
+(12, 'sophiaSecurePass456', '2024-02-02'),
+(13, 'mikeKey789', '2024-02-03'),
+(14, 'emilyHidden111', '2024-02-04'),
+(15, 'jasonLock987', '2024-02-05'),
+(16, 'oliviaTrustNoOne333', '2024-02-06'),
+(17, 'ryanLetMeIn222', '2024-02-07'),
+(18, 'ameliaPass444', '2024-02-08'),
+(19, 'noahBackup555', '2024-02-09'),
+(20, 'emmaTopSecret777', '2024-02-10');
+
+INSERT INTO web (website_name, website_url) VALUES
 ('Google', 'https://www.google.com'),
 ('Facebook', 'https://www.facebook.com'),
 ('Amazon', 'https://www.amazon.com'),
@@ -20,102 +52,134 @@ INSERT INTO Websites (website_name, website_url) VALUES
 ('Instagram', 'https://www.instagram.com'),
 ('Reddit', 'https://www.reddit.com'),
 ('GitHub', 'https://www.github.com'),
-('Netflix', 'https://www.netflix.com');
+('Netflix', 'https://www.netflix.com'),
+('StackOverflow', 'https://stackoverflow.com'),
+('Slack', 'https://slack.com'),
+('Discord', 'https://discord.com'),
+('Dropbox', 'https://www.dropbox.com'),
+('PayPal', 'https://www.paypal.com'),
+('Spotify', 'https://www.spotify.com'),
+('Pinterest', 'https://www.pinterest.com'),
+('TikTok', 'https://www.tiktok.com'),
+('Quora', 'https://www.quora.com'),
+('Twitch', 'https://www.twitch.tv');
 
-INSERT INTO CreditDebitCards (user_id, cardholder_name, card_number, card_type, expiration_date, cvv, billing_address, created_at) VALUES 
+INSERT INTO web_pass (user_id, website_id, web_pass) VALUES
+(1, 1, 'aliceGooglePass123'),
+(1, 2, 'aliceFacebook456'),
+(1, 3, 'aliceAmazon789'),
+(2, 4, 'bobTwitter123'),
+(2, 5, 'bobLinkedIn456'),
+(2, 6, 'bobYouTube789'),
+(3, 7, 'carlaInsta111'),
+(3, 8, 'carlaReddit222'),
+(3, 9, 'carlaGitHub333'),
+(4, 10, 'danielNetflix444'),
+(4, 1, 'danielGoogle555'),
+(4, 2, 'danielFacebook666'),
+(11, 11, 'lucasStackPass123'),
+(11, 12, 'lucasSlackPass456'),
+(11, 13, 'lucasDiscord789'),
+(12, 14, 'sophiaDropbox111'),
+(12, 15, 'sophiaPayPal222'),
+(12, 16, 'sophiaSpotify333'),
+(13, 17, 'mikePinterest444'),
+(13, 18, 'mikeTikTok555'),
+(13, 19, 'mikeQuora666'),
+(14, 20, 'emilyTwitch777'),
+(14, 11, 'emilyStackOverflow888'),
+(14, 12, 'emilySlack999');
+
+INSERT INTO cards (user_id, cardholder_name, card_number, card_type, expiration_date, cvv, billing_address, created_at) VALUES
 (1, 'Alice W', '4111111111111111', 'Visa', '2025-05', '123', '123 Elm St, Springfield', '2024-01-11'),
 (2, 'Bob D', '5111111111111111', 'MasterCard', '2026-04', '456', '456 Oak St, Springfield', '2024-01-12'),
 (3, 'Carla R', '6111111111111111', 'American Express', '2025-03', '789', '789 Maple St, Springfield', '2024-01-13'),
-(4, 'Daniel T', '4111111111112222', 'Visa', '2026-06', '321', '321 Pine St, Springfield', '2024-01-14'),
-(5, 'Eve H', '5111111111112222', 'MasterCard', '2025-07', '654', '654 Cedar St, Springfield', '2024-01-15'),
-(6, 'Frank J', '6111111111112222', 'American Express', '2025-08', '987', '987 Birch St, Springfield', '2024-01-16'),
-(7, 'Grace K', '4111111111113333', 'Visa', '2026-09', '432', '432 Walnut St, Springfield', '2024-01-17'),
-(8, 'Hank L', '5111111111113333', 'MasterCard', '2025-10', '765', '765 Chestnut St, Springfield', '2024-01-18'),
-(9, 'Ivy M', '6111111111113333', 'American Express', '2026-11', '098', '098 Cypress St, Springfield', '2024-01-19'),
-(10, 'Jack O', '4111111111114444', 'Visa', '2026-12', '210', '210 Beech St, Springfield', '2024-01-20');
+(3, 'Carla R', '4111222233334444', 'Visa', '2026-06', '123', '789 Maple St, Springfield', '2024-01-14'),
+(4, 'Daniel T', '5111333344445555', 'MasterCard', '2025-07', '456', '321 Pine St, Springfield', '2024-01-15'),
+(11, 'Lucas P', '5211222233334444', 'Visa', '2028-01', '321', '456 Beach Blvd, Miami', '2024-02-01'),
+(12, 'Sophia L', '6311444455556666', 'MasterCard', '2027-02', '654', '789 Ocean Dr, San Diego', '2024-02-02'),
+(13, 'Mike R', '4111333344445555', 'American Express', '2029-03', '987', '321 Sunset Ave, Seattle', '2024-02-03'),
+(13, 'Mike R', '5311666677778888', 'Visa', '2025-12', '432', '321 Sunset Ave, Seattle', '2024-02-04'),
+(14, 'Emily C', '4111888899990000', 'MasterCard', '2026-05', '765', '654 Maple Dr, Chicago', '2024-02-05');
 
-INSERT INTO History (user_id, action_type, action_details, action_timestamp) VALUES 
+INSERT INTO history (user_id, action_type, action_details, action_timestamp) VALUES
 (1, 'Password change', 'Updated Google password', '2024-01-21'),
 (2, 'Card added', 'Added new Visa card', '2024-01-22'),
-(3, 'Password change', 'Updated Facebook password', '2024-01-23'),
+(3, 'Password reset', 'Reset Facebook password', '2024-01-23'),
 (4, 'Login', 'Logged in from new device', '2024-01-24'),
-(5, 'Password reset', 'Reset LinkedIn password', '2024-01-25'),
-(6, 'Card added', 'Added new MasterCard', '2024-01-26'),
-(7, 'Password change', 'Updated Instagram password', '2024-01-27'),
-(8, 'Login', 'Logged in from new device', '2024-01-28'),
-(9, 'Password change', 'Updated GitHub password', '2024-01-29'),
-(10, 'Password reset', 'Reset Amazon password', '2024-01-30');
+(5, 'Password change', 'Updated LinkedIn password', '2024-01-25'),
+(11, 'Password added', 'Added new StackOverflow password', '2024-02-01'),
+(12, 'Card added', 'Added new Visa card', '2024-02-02'),
+(13, 'Password reset', 'Reset Pinterest password', '2024-02-03'),
+(14, 'Login', 'Logged in from new location', '2024-02-04'),
+(15, 'Password added', 'Added new Twitch password', '2024-02-05');
 
-INSERT INTO DevicesLocations (user_id, device_name, device_type, operating_system, ip_address, city, country, login_timestamp) VALUES 
-(1, "Alice\'s iPhone", 'Mobile', 'iOS', '192.168.1.2', 'Springfield', 'USA', '2024-01-31'),
-(2, "Bob\'s Laptop", 'PC', 'Windows', '192.168.1.3', 'Springfield', 'USA', '2024-01-32'),
-(3, "Carla\'s Tablet", 'Mobile', 'Android', '192.168.1.4', 'Springfield', 'USA', '2024-01-33'),
-(4, "Daniel\'s Desktop", 'PC', 'Linux', '192.168.1.5', 'Springfield', 'USA', '2024-01-34'),
-(5, "Eve\'s iPad", 'Mobile', 'iOS', '192.168.1.6', 'Springfield', 'USA', '2024-01-35'),
-(6, "Frank\'s Phone", 'Mobile', 'Android', '192.168.1.7', 'Springfield', 'USA', '2024-01-36'),
-(7, "Grace\'s Laptop", 'PC', 'Windows', '192.168.1.8', 'Springfield', 'USA', '2024-01-37'),
-(8, "Hank\'s iPhone", 'Mobile', 'iOS', '192.168.1.9', 'Springfield', 'USA', '2024-01-38'),
-(9, "Ivy\'s Tablet", 'Mobile', 'Android', '192.168.1.10', 'Springfield', 'USA', '2024-01-39'),
-(10, "Jack\'s Desktop", 'PC', 'Linux', '192.168.1.11', 'Springfield', 'USA', '2024-01-40');
+INSERT INTO devloc (user_id, device_name, device_type, operating_system, ip_address, city, country, login_timestamp) VALUES
+(1, 'Alice iPhone', 'Mobile', 'iOS', '192.168.1.2', 'Springfield', 'USA', '2024-01-31'),
+(2, 'Bob Laptop', 'PC', 'Windows', '192.168.1.3', 'Springfield', 'USA', '2024-01-32'),
+(3, 'Carla Tablet', 'Mobile', 'Android', '192.168.1.4', 'Springfield', 'USA', '2024-01-33'),
+(11, 'Luca Tablet', 'Tablet', 'Android', '192.168.2.2', 'Miami', 'USA', '2024-02-01'),
+(12, 'Sophie Laptop', 'PC', 'Windows', '192.168.2.3', 'San Diego', 'USA', '2024-02-02'),
+(13, 'Mike Phone', 'Mobile', 'iOS', '192.168.2.4', 'Seattle', 'USA', '2024-02-03');
 
-INSERT INTO Groups (group_name, group_domain, group_type, created_at) VALUES 
+INSERT INTO groups (group_name, group_domain, group_type, created_at) VALUES
 ('Company A', 'companya.com', 'Enterprise', '2024-01-01'),
-('Company B', 'companyb.com', 'Enterprise', '2024-01-02'),
-('School C', 'schoolc.edu', 'Educational', '2024-01-03'),
-('Club D', 'clubd.org', 'Nonprofit', '2024-01-04'),
-('Research Lab E', 'researche.org', 'Research', '2024-01-05'),
-('Startup F', 'startupf.io', 'Enterprise', '2024-01-06'),
-('University G', 'universityg.edu', 'Educational', '2024-01-07'),
-('Group H', 'grouph.com', 'Community', '2024-01-08'),
-('Foundation I', 'foundationi.org', 'Nonprofit', '2024-01-09'),
-('Collective J', 'collectivej.com', 'Community', '2024-01-10');
+('University B', 'universityb.edu', 'Educational', '2024-01-02'),
+('Club C', 'clubc.org', 'Nonprofit', '2024-01-03'),
+('Tech Enthusiasts', 'techenthusiasts.org', 'Community', '2024-02-01'),
+('Gaming Guild', 'gamingguild.com', 'Community', '2024-02-02'),
+('Photography Club', 'photoclub.org', 'Nonprofit', '2024-02-03');
 
+INSERT INTO group_u (group_id, user_id, email) VALUES
+(1, 1, 'alice@companya.com'),
+(2, 2, 'bob@universityb.edu'),
+(2, 3, 'carla@universityb.edu'),
+(3, 4, 'daniel@clubc.org'),
+(4, 11, 'lucas@techenthusiasts.org'),
+(5, 12, 'sophia@gamingguild.com'),
+(5, 13, 'mike@gamingguild.com'),
+(6, 14, 'emily@photoclub.org');
 
-INSERT INTO Group_Users (group_id, user_id, email) VALUES 
-(1, 1, 'alice_w@companya.com'),
-(2, 2, 'bob_d@companyb.com'),
-(3, 3, 'carla_r@schoolc.edu'),
-(4, 4, 'daniel_t@clubd.org'),
-(5, 5, 'eve_h@researche.org'),
-(6, 6, 'frank_j@startupf.io'),
-(7, 7, 'grace_k@universityg.edu'),
-(8, 8, 'hank_l@grouph.com'),
-(9, 9, 'ivy_m@foundationi.org'),
-(10, 10, 'jack_o@collectivej.com');
+INSERT INTO group_pass (group_id, user_id, group_email_pass) VALUES
+(1, 1, 'CompanyAPass123'),
+(2, 2, 'UniversityBPass456'),
+(2, 3, 'UniversityBPass789'),
+(3, 4, 'ClubCPass111'),
+(4, 11, 'TechEnthusiastPass123'),
+(5, 12, 'GamingGuildPass456'),
+(5, 13, 'GamingGuildPass789'),
+(6, 14, 'PhotoClubPass111');
 
-
-INSERT INTO Group_Passwords (group_id, password_id) VALUES 
+INSERT INTO group_link (group_id, password_id) VALUES
 (1, 1),
 (2, 2),
 (3, 3),
-(4, 4),
-(5, 5),
-(6, 6),
-(7, 7),
-(8, 8),
-(9, 9),
-(10, 10);
+(4, 11),
+(5, 12),
+(6, 13);
 
-INSERT INTO Passwords (user_id, password_plain, created_at) VALUES 
-(1, 'password123', '2024-01-11'),
-(2, 'mypassword456', '2024-01-12'),
-(3, 'admin789', '2024-01-13'),
-(4, 'secretkey111', '2024-01-14'),
-(5, 'qwerty222', '2024-01-15'),
-(6, 'zxcvb333', '2024-01-16'),
-(7, 'lmnop444', '2024-01-17'),
-(8, 'asdfg555', '2024-01-18'),
-(9, 'hjkl666', '2024-01-19'),
-(10, 'yuiop777', '2024-01-20');
-
-INSERT INTO User_Websites (user_id, website_id) VALUES 
+INSERT INTO user_web (user_id, website_id) VALUES
 (1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 6),
-(7, 7),
-(8, 8),
-(9, 9),
-(10, 10);
+(1, 2),
+(1, 3),
+(2, 4),
+(2, 5),
+(2, 6),
+(3, 7),
+(3, 8),
+(3, 9),
+(4, 10),
+(4, 1),
+(4, 2),
+(11, 11),
+(11, 12),
+(11, 13),
+(12, 14),
+(12, 15),
+(12, 16),
+(13, 17),
+(13, 18),
+(13, 19),
+(14, 20),
+(14, 11),
+(14, 12);

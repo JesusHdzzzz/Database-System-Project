@@ -85,8 +85,7 @@ def retrievePass(conn):
         print("\nPassword Management")
         print("1. Retrieve a website password")
         print("2. Retrieve a group password")
-        print("3. Retrieve all passwords")
-        print("4. Exit")
+        print("3. Exit")
         
         choice = input("Enter your choice: ")
         
@@ -95,8 +94,6 @@ def retrievePass(conn):
         elif choice == '2':
             retrieveGroupPass(conn)
         elif choice == '3':
-            retrieveAllPass(conn)
-        elif choice == '4':
             break
         else:
             print("Invalid choice. Please try again.")

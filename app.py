@@ -5,7 +5,6 @@ import re
 import config
 from passwordManagement import *
 from creditDebitCardMan import *
-from groupEmail import *
 from history import *
 
 def openConnection(_dbFile):

@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-
+import re
 
 def openConnection(_dbFile):
     print("++++++++++++++++++++++++++++++++++")
@@ -196,15 +196,65 @@ def createTable(_conn):
 # 
 
 def createAccount(conn):
-    username = input("Enter a new username: ")
-    try:
-        conn.execute("INSERT INTO Users (username) VALUES (?)", (username,))
-        conn.commit()
-        print("User added successfully!")
-    except sqlite3.IntegrityError:
-        print("Username already exists!")
+    # Step 1: Get Email from the User and Validate It
+    while True:
+        email = input("Enter your email address: ").strip()
+
+        # Validate email format
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            print("Invalid email format. Please try again.")
+            continue
         
-import sqlite3
+        try:
+            # Check if the email already exists in the database
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+            if cursor.fetchone():
+                print("Email already exists. Please try a different email.")
+                continue
+
+            break  # Email is valid and doesn't already exist
+
+        except sqlite3.Error as e:
+            print("Database error while checking email: ", e)
+
+    # Step 2: Get the Username
+    while True:
+        username = input("Enter a new username: ").strip()
+
+        try:
+            # Insert the new user into the database
+            conn.execute("INSERT INTO users (username, email) VALUES (?, ?)", (username, email))
+            conn.commit()
+            print(f"Username '{username}' successfully added to the database.")
+            break
+        except sqlite3.IntegrityError:
+            print("Username already exists. Please try a different username.")
+
+    # Step 3: Get the Master Password
+    while True:
+        m_pass = input("Create a master password: ").strip()
+
+        if len(m_pass) < 6:
+            print("Your password must be at least 6 characters long.")
+            continue
+
+        try:
+            cursor = conn.cursor()
+
+            # Retrieve user_id for the newly created username
+            cursor.execute("SELECT user_id FROM users WHERE username = ?", (username,))
+            user_id = cursor.fetchone()[0]
+
+            # Save the master password in the `pass` table
+            conn.execute("INSERT INTO pass (user_id, m_pass) VALUES (?, ?)", (user_id, m_pass))
+            conn.commit()
+
+            print("Account successfully created with a master password.")
+            return True
+            break
+        except sqlite3.Error as e:
+            print("Database error while creating password: ", e)
 
 def login(conn):
     """Handles user login."""
@@ -262,7 +312,8 @@ def main():
             if login(conn):
                 break
         elif choice == '2':
-            createAccount(conn)
+            if createAccount(conn):
+                break
         else:
             print("Invalid choice. Please try again.")
 

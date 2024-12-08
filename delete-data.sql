@@ -1,29 +1,47 @@
-DELETE FROM CreditDebitCards;
-delete from sqlite_sequence where name='CreditDebitCards';
+-- Delete all records from Credit and Debit Cards table
+DELETE FROM cards;
+DELETE FROM sqlite_sequence WHERE name='cards';
 
-DELETE FROM DevicesLocations;
-delete from sqlite_sequence where name='DevicesLocations';
+-- Delete all records from Device Locations table
+DELETE FROM devloc;
+DELETE FROM sqlite_sequence WHERE name='devloc';
 
-DELETE FROM Group_Passwords;
-delete from sqlite_sequence where name='Group_Passwords';
+-- Delete all records from Group Pass table
+DELETE FROM group_link;
+DELETE FROM sqlite_sequence WHERE name='group_link';
 
-DELETE FROM Group_Users;
-delete from sqlite_sequence where name='Group_Users';
+-- Delete all records from Group Users table
+DELETE FROM group_u;
+DELETE FROM sqlite_sequence WHERE name='group_u';
 
-DELETE FROM "Groups";
-delete from sqlite_sequence where name='Groups';
+-- Delete all records from Groups table
+DELETE FROM groups;
+DELETE FROM sqlite_sequence WHERE name='groups';
 
-DELETE FROM History;
-delete from sqlite_sequence where name='History';
+-- Delete all records from History table
+DELETE FROM history;
+DELETE FROM sqlite_sequence WHERE name='history';
 
-DELETE FROM Passwords;
-delete from sqlite_sequence where name='Passwords';
+-- Delete all records from Pass table (master passwords)
+DELETE FROM pass;
+DELETE FROM sqlite_sequence WHERE name='pass';
 
-DELETE FROM User_Websites;
-delete from sqlite_sequence where name='User_Websites';
+-- Delete all records from User Websites table
+DELETE FROM user_web;
+DELETE FROM sqlite_sequence WHERE name='user_web';
 
-DELETE FROM Users;
-delete from sqlite_sequence where name='Users';
+-- Delete all records from Users table
+DELETE FROM users;
+DELETE FROM sqlite_sequence WHERE name='users';
 
-DELETE FROM Websites;
-delete from sqlite_sequence where name='Websites';
+-- Delete all records from Websites table
+DELETE FROM web;
+DELETE FROM sqlite_sequence WHERE name='web';
+
+-- Delete all records from Group Passwords table
+DELETE FROM group_pass;
+DELETE FROM sqlite_sequence WHERE name='group_pass';
+
+-- Delete all records from Websites table
+DELETE FROM web_pass;
+DELETE FROM sqlite_sequence WHERE name='web_pass';

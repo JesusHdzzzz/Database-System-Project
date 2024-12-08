@@ -193,9 +193,13 @@ def main():
     while True:
         print("\n|| Password Manager ||")
         print("1. Password and Website Management")
+        # Retrieve, save, delete, update passwords
         print("2. Credit/Debit Card Management")
+        # Add a new credit card, delete a credit card, update a credit card
         print("3. Group and Email Integration")
+        # Retrieve and update group emails only
         print("4. History and Logs")
+        # Retrieve change history
         print("5. Exit")
         choice = input("Enter your choice: ")
 

@@ -79,10 +79,13 @@ def retrieveGroupPass(conn):
     except sqlite3.Error as e:
         print("Database error: ", e)
 
+"""
+Retrieve passwords for both websites and groups for a specific user
+"""
 def retrievePass(conn):
         
     while True:
-        print("\nPassword Management")
+        print("\n|| Retrieve a Password ||")
         print("1. Retrieve a website password")
         print("2. Retrieve a group password")
         print("3. Exit")
@@ -97,13 +100,98 @@ def retrievePass(conn):
             break
         else:
             print("Invalid choice. Please try again.")
+
+def updateWebPass(conn):
+    try:
+        cursor = conn.cursor()
+
+        # Print all websites that the user has saved passwords for
+        cursor.execute("""
+            SELECT web.website_name
+            FROM web
+            JOIN web_pass ON web.website_id = web_pass.website_id
+            WHERE web_pass.user_id = ?
+            """, (config.user_id,))
+        print("List of websites you have saved passwords for:")
+        for row in cursor.fetchall():
+            print(row[0])
+
+        website_name = input("Enter the website name: ").strip().lower()
+
+        cursor = conn.cursor()
+
+        # Execute the query to update the password for the given user and website
+        cursor.execute("""
+            UPDATE web_pass
+            SET web_pass = ?
+            WHERE user_id = ?
+            AND website_id = (
+                SELECT website_id
+                FROM web
+                WHERE website_name = ?
+            )
+            """, (input("Enter the new password: "), config.user_id, website_name))
+
+        conn.commit()
+        print("Password updated successfully.")
+
+    except sqlite3.Error as e:
+        print("Database error: ", e)
+
+def updateGroupPass(conn):
+    try:
+        cursor = conn.cursor()
+
+        # Print all groups that the user has saved passwords for
+        cursor.execute("""
+            SELECT groups.group_name
+            FROM groups
+            JOIN group_pass ON groups.group_id = group_pass.group_id
+            WHERE group_pass.user_id = ?
+            """, (config.user_id,))
+        print("List of groups you have saved passwords for:")
+        for row in cursor.fetchall():
+            print(row[0])
+
+        group_name = input("Enter the group name (case-sensitive): ").strip()
+
+        cursor = conn.cursor()
+
+        # Execute the query to update the password for the given user and group
+        cursor.execute("""
+            UPDATE group_pass
+            SET group_email_pass = ?
+            WHERE user_id = ?
+            AND group_id = (
+                SELECT group_id
+                FROM groups
+                WHERE group_name = ?
+            )
+            """, (input("Enter the new password: "), config.user_id, group_name))
+
+        conn.commit()
+        print("Password updated successfully.")
+
+    except sqlite3.Error as e:
+        print("Database error: ", e)
+
+def updatePass(conn):
+    while True:
+        print("\n|| Password Management ||")
+        print("1. Update a website password")
+        print("2. Update a group password")
+        print("3. Exit")
         
-#def updatePass(conn):
-#    try:
-#
-#    except sqlite3.Error as e:
-#        print("Database error: ", e)
-#        
+        choice = input("Enter your choice: ")
+        
+        if choice == '1':
+            updateWebPass(conn)
+        elif choice == '2':
+            updateGroupPass(conn)
+        elif choice == '3':
+            break
+        else:
+            print("Invalid choice. Please try again.")
 #def savePass(conn):
 #    try:
 #

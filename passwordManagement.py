@@ -40,6 +40,44 @@ def retrieveWebPass(conn):
     except sqlite3.Error as e:
         print("Database error: ", e)
 
+def retrieveGroupPass(conn):
+    try:
+        cursor = conn.cursor()
+
+        # Print all groups that the user has saved passwords for
+        cursor.execute("""
+            SELECT groups.group_name
+            FROM groups
+            JOIN group_pass ON groups.group_id = group_pass.group_id
+            WHERE group_pass.user_id = ?
+            """, (config.user_id,))
+        print("List of groups you have saved passwords for:")
+        for row in cursor.fetchall():
+            print(row[0])
+
+        group_name = input("Enter the group name (case-sensitive): ").strip()
+
+        cursor = conn.cursor()
+
+        # Execute the query to retrieve the password for the given user and group
+        cursor.execute("""SELECT group_email_pass 
+            FROM group_pass, groups
+            WHERE user_id = ? 
+            AND group_pass.group_id = groups.group_id
+            AND group_name = ?""", (config.user_id, group_name))
+        group_pass = cursor.fetchone()
+
+        print("config.user_id:", config.user_id)
+        print("group_name:", group_name)
+
+        # Check if a password was found and print it
+        if group_pass:    
+            print(f"Group password for user {config.username} in group {group_name}: {group_pass[0]}")
+        else:
+            print("No password found for the given user ID and group name.")
+
+    except sqlite3.Error as e:
+        print("Database error: ", e)
 
 def retrievePass(conn):
         
@@ -62,20 +100,6 @@ def retrievePass(conn):
             break
         else:
             print("Invalid choice. Please try again.")
-        #try:
-        #    all_pass = conn.execute("SELECT * FROM pass").fetchall()
-    #
-        #    if not all_pass:
-        #        print("No passwords found.")
-        #        return
-    #
-        #    print("List of all passwords:")
-    #
-        #    for row in all_pass:
-        #        print(f"ID: {row[0]}, User ID: {row[1]}, Password: {row[2]}, Created At: {row[3]}")
-        #        
-        #except sqlite3.Error as e:
-        #    print("Database error: ", e)
         
 #def updatePass(conn):
 #    try:

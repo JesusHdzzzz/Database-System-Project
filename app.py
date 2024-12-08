@@ -1,9 +1,14 @@
 import sqlite3
 from sqlite3 import Error
+<<<<<<< HEAD
+import getpass
+
+=======
 from create_tables import createTable
 import re
 from passwordManagement import *
 import config
+>>>>>>> 8873dbb10089f142feb8255b3c1d25d046a0f91e
 
 def openConnection(_dbFile):
     
@@ -34,6 +39,53 @@ def closeConnection(_conn, _dbFile):
     print("++++++++++++++++++++++++++++++++++")
 
 def createAccount(conn):
+<<<<<<< HEAD
+    try:
+        # Step 1: Gather user details
+        username = input("Enter your username: ")
+        email = input("Enter your email address: ")
+
+        # Step 2: Insert user into the Users table
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO users (username, email) VALUES (?, ?)", 
+            (username, email)
+        )
+        conn.commit()
+
+        # Fetch the user_id of the newly created user
+        user_id = cursor.lastrowid
+
+        # Step 3: Prompt for master password
+        print("Set a master password for your account (you'll use this to access your data).")
+        master_password = getpass.getpass("Enter your master password: ")
+        confirm_password = getpass.getpass("Confirm your master password: ")
+
+        if master_password != confirm_password:
+            print("Passwords do not match. Please try again.")
+            conn.execute("DELETE FROM Users WHERE user_id = ?", (user_id,))
+            conn.commit()
+            return
+
+        # Step 4: Save the master password in the pass table
+        cursor.execute(
+            "INSERT INTO pass (user_id, m_pass) VALUES (?, ?)", 
+            (user_id, master_password)
+        )
+        conn.commit()
+
+        print(f"Account for '{username}' created successfully!")
+
+    except sqlite3.IntegrityError as e:
+        if "UNIQUE constraint failed: Users.username" in str(e):
+            print("Username is already taken. Please choose a different username.")
+        elif "UNIQUE constraint failed: Users.email" in str(e):
+            print("Email is already registered. Please use a different email address.")
+        else:
+            print("An error occurred:", e)
+
+
+=======
     # Step 1: Get Email from the User and Validate It
     while True:
         email = input("Enter your email address: ").strip()
@@ -42,6 +94,7 @@ def createAccount(conn):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             print("Invalid email format. Please try again.")
             continue
+>>>>>>> 8873dbb10089f142feb8255b3c1d25d046a0f91e
         
         try:
             # Check if the email already exists in the database
@@ -95,6 +148,39 @@ def createAccount(conn):
             print("Database error while creating password: ", e)
 
 def login(conn):
+<<<<<<< HEAD
+    username = input("Enter your username: ")
+    master_password = getpass.getpass("Enter your master password: ")
+
+    try:
+        # Step 1: Check if the username exists
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT u.user_id, p.m_pass FROM users u "
+            "JOIN pass p ON u.user_id = p.user_id "
+            "WHERE u.username = ?",
+            (username,)
+        )
+        result = cursor.fetchone()
+
+        if result is None:
+            print("Invalid username or password. Please try again.")
+            return None
+
+        user_id, stored_password = result
+
+        # Step 2: Validate the master password
+        if master_password == stored_password:
+            print(f"Login successful! Welcome, {username}.")
+            return user_id  # Return user_id for further operations
+        else:
+            print("Invalid username or password. Please try again.")
+            return None
+
+    except sqlite3.Error as e:
+        print("An error occurred:", e)
+        return None
+=======
     """Handles user login."""
     try:
         username = input("Enter your username: ").strip()

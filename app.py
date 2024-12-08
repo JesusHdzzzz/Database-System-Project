@@ -192,25 +192,22 @@ def main():
     
     while True:
         print("\n|| Password Manager ||")
-        print("1. Password Management")
-        print("2. Website Management")
-        print("3. Credit/Debit Card Management")
-        print("4. Group and Email Integration")
-        print("5. History and Logs")
-        print("6. Exit")
+        print("1. Password and Website Management")
+        print("2. Credit/Debit Card Management")
+        print("3. Group and Email Integration")
+        print("4. History and Logs")
+        print("5. Exit")
         choice = input("Enter your choice: ")
 
         if choice == '1':
             passManage(conn)
         if choice == '2':
-            webManage(conn)
-        if choice == '3':
             cdMan(conn)
-        if choice == '4':
+        if choice == '3':
             gEmail(conn)
-        if choice == '5':
+        if choice == '4':
             history(conn)
-        if choice == '6':
+        if choice == '5':
             config.username = None
             config.user_id = None
             closeConnection(conn, database)

@@ -278,9 +278,54 @@ def savePass(conn):
             break
         else:
             print("Invalid choice. Please try again.")
+
+def deleteWebPass(conn):
+    try:
+        cursor = conn.cursor()
+        # Print all websites the user has saved passwords for        
+        # Print all websites the user has saved passwords for
+        cursor.execute("""
+            SELECT web.website_name
+            FROM web
+            JOIN web_pass ON web.website_id = web_pass.website_id
+            WHERE web_pass.user_id = ?
+        """, (config.user_id,))
+        saved_websites = cursor.fetchall()
+
+        print("List of websites you have saved passwords for:")
+        if saved_websites:
+            for row in saved_websites:
+                print(f"- {row[0]}")
+        else:
+            print("No websites saved yet.")
+
+        # Get website details
+        website_name = input("Enter the website name: ").strip().lower()
+
+        # Check if the website exists
+        cursor.execute("""
+            SELECT website_id
+            FROM web
+            WHERE website_name = ?
+        """, (website_name,))
+        result = cursor.fetchone()
+
+        print(result)
         
-#def deletePass(conn):
-#    try:
-#
-#    except sqlite3.Error as e:
-#        print("Database error: ", e)
+    except sqlite3.Error as e:
+        print("Database error:", e)
+
+def deletePass(conn):
+    while True:
+        print("\n|| Delete a Password ||")
+        print("1. Delete a website password")
+        print("2. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            deleteWebPass(conn)
+        elif choice == '2':
+            break
+        else:
+            print("Invalid choice. Please try again.")

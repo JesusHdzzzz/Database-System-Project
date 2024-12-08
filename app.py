@@ -3,6 +3,7 @@ from sqlite3 import Error
 from create_tables import createTable
 import re
 from passwordManagement import *
+import config
 
 def openConnection(_dbFile):
     
@@ -101,7 +102,7 @@ def login(conn):
 
         # Query to fetch the user's stored password based on the username
         query = """
-            SELECT pass.m_pass 
+            SELECT pass.m_pass, users.user_id
             FROM users 
             JOIN pass ON users.user_id = pass.user_id 
             WHERE users.username = ?
@@ -112,13 +113,18 @@ def login(conn):
         #print("Username supplied:", username)
         #print("Is it a tuple?", isinstance((username,), tuple))
 
-
         if user:
             # User found; prompt for password
             stored_password = user[0]  # Extract stored password from the query result
             password = input("Enter your password: ").strip()
 
             if password == stored_password:
+                config.username = username # Set the global variable for username
+                config.user_id = user[1] # Set the global variable for user_id
+
+                #print("User ID:", config.user_id)
+                #print("Username:", config.username)
+
                 print("Login successful!")
                 return True
             else:
@@ -170,6 +176,7 @@ def main():
         if choice == '1':
             if login(conn):
                 break
+                
         elif choice == '2':
             if createAccount(conn):
                 break
@@ -198,6 +205,7 @@ def main():
         if choice == '5':
             history(conn)
         if choice == '6':
+            config.username = None
             closeConnection(conn, database)
 
 if __name__ == '__main__':

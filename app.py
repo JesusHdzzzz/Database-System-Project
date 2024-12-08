@@ -1,8 +1,11 @@
 import sqlite3
 from sqlite3 import Error
+from create_tables import createTable
 import re
+from passwordManagement import *
 
 def openConnection(_dbFile):
+    
     print("++++++++++++++++++++++++++++++++++")
     print("Open database: ", _dbFile)
 
@@ -28,172 +31,6 @@ def closeConnection(_conn, _dbFile):
         print(e)
 
     print("++++++++++++++++++++++++++++++++++")
-
-
-def createTable(_conn):
-    print("++++++++++++++++++++++++++++++++++")
-    print("Create table")
-    
-    try:
-
-        cur = _conn.cursor()
-
-        cur.execute(""" 
-            -- Users table (parent table)
-        CREATE TABLE IF NOT EXISTS users (
-            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL UNIQUE,
-            email TEXT NOT NULL UNIQUE,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );""")
-        
-        cur.execute("""
-        -- Passwords table
-        CREATE TABLE IF NOT EXISTS pass (
-            password_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INT,
-            m_pass TEXT NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        );""")
-        
-        cur.execute("""
-        -- Websites table
-        CREATE TABLE IF NOT EXISTS web (
-            website_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            website_name TEXT NOT NULL,
-            website_url TEXT NOT NULL
-        );""")
-        
-        cur.execute("""
-        -- Web_passwords table
-        CREATE TABLE IF NOT EXISTS web_pass (
-            user_id INT,
-            website_id INT,
-            web_pass TEXT NOT NULL,
-            PRIMARY KEY (user_id, website_id),
-            FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-            FOREIGN KEY(website_id) REFERENCES Websites(website_id) ON DELETE CASCADE
-        );""")
-        
-        cur.execute("""
-        -- CreditDebitCards table
-        CREATE TABLE IF NOT EXISTS cards (
-            card_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INT,
-            cardholder_name TEXT NOT NULL,
-            card_number TEXT NOT NULL,
-            card_type TEXT NOT NULL CHECK (card_type IN ('Visa', 'MasterCard', 'American Express')),
-            expiration_date TEXT NOT NULL,
-            cvv TEXT NOT NULL,
-            billing_address TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        );""")
-        
-        cur.execute("""
-        -- History table
-        CREATE TABLE IF NOT EXISTS history (
-            history_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INT,
-            action_type TEXT NOT NULL, 
-            action_details TEXT,
-            action_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        );""")
-        
-        cur.execute("""
-        -- DevicesLocations table
-        CREATE TABLE IF NOT EXISTS devloc (
-            entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INT,
-            device_name TEXT,
-            device_type TEXT,
-            operating_system TEXT,
-            ip_address TEXT,
-            city TEXT,
-            country TEXT,
-            login_timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        );""")
-        
-        cur.execute("""
-        -- Groups table
-        CREATE TABLE IF NOT EXISTS groups (
-            group_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            group_name TEXT NOT NULL,
-            group_domain TEXT NOT NULL,
-            group_type TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );""")
-        
-        cur.execute("""
-        -- Group_Users table
-        CREATE TABLE IF NOT EXISTS group_u (
-            group_id INTEGER,
-            user_id INTEGER,
-            email TEXT NOT NULL,
-            PRIMARY KEY (group_id, user_id),
-            FOREIGN KEY(group_id) REFERENCES Groups(group_id) ON DELETE CASCADE,
-            FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE
-        );""")
-        
-        cur.execute("""
-        -- Group_Passwords table
-        CREATE TABLE IF NOT EXISTS group_link (
-            group_id INTEGER,
-            password_id INTEGER,
-            PRIMARY KEY (group_id, password_id),
-            FOREIGN KEY(group_id) REFERENCES Groups(group_id) ON DELETE CASCADE,
-            FOREIGN KEY(password_id) REFERENCES Passwords(password_id) ON DELETE CASCADE
-        );""")
-        
-        cur.execute("""
-        -- User_Websites table
-        CREATE TABLE IF NOT EXISTS user_web (
-            user_id INT,
-            website_id INT,
-            PRIMARY KEY (user_id, website_id),
-            FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-            FOREIGN KEY(website_id) REFERENCES Websites(website_id) ON DELETE CASCADE
-        );""")
-        
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS group_pass (
-            group_id INTEGER, -- References the group the user belongs to
-            user_id INTEGER, -- References the user within the group
-            group_email_pass TEXT NOT NULL, -- Stores the password for the user's group email
-            PRIMARY KEY (group_id, user_id), -- Composite primary key ensures unique group-user-password relationship
-            FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE, -- Cascade delete when a group is deleted
-            FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE -- Cascade delete when a user is deleted
-        );""")
-        _conn.commit()
-        print("success")    
-    except Error as e:
-        _conn.rollback()
-        print(e)
-
-    print("++++++++++++++++++++++++++++++++++")
-
-
-# def dropTable(_conn):
-#     print("++++++++++++++++++++++++++++++++++")
-#     print("Drop tables")
-    
-#     #cur = _conn.cursor()
-#     try:
-#         sql= "DROP TABLE warehouse"
-#         _conn.execute(sql)
-        
-#         _conn.commit()
-#         print("success")
-        
-#     except Error as e:
-#         _conn.rollback()
-#         print(e)
-    
-#     print("++++++++++++++++++++++++++++++++++")
-# 
 
 def createAccount(conn):
     # Step 1: Get Email from the User and Validate It
@@ -272,8 +109,8 @@ def login(conn):
         cursor.execute(query, (username,))
         user = cursor.fetchone()
 
-        print("Username supplied:", username)
-        print("Is it a tuple?", isinstance((username,), tuple))
+        #print("Username supplied:", username)
+        #print("Is it a tuple?", isinstance((username,), tuple))
 
 
         if user:
@@ -292,8 +129,26 @@ def login(conn):
     except sqlite3.Error as e:
         print("Database error: ", e)
     except Exception as e:
-        print("Unexpected error: ", e)
+        print("Unexpected error: ", e)        
 
+def passManage(conn):
+    while True:
+        print('\nPassword Management')
+        print("1. Retrieve a website/group password")
+        print("2. Update a website/group password")
+        print("3. Save a new password for website/group")
+        print("4. View password history")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            retrievePass(conn)
+        if choice == '2':
+            updatePass(conn)
+        if choice == '3':
+            savePass(conn)
+        if choice == '4':
+            viewPassHistory(conn)
 
 
 def main():
@@ -302,6 +157,10 @@ def main():
     conn = openConnection(database)
     #createTable(conn)
     
+    if conn:
+        createTable(conn)
+        print("Tables are ready to use.")
+
     while True:
         print("1. Log in")
         print("2. Create a new account")
@@ -319,16 +178,27 @@ def main():
 
     
     while True:
-        print("\nPassword Manager")
-        print("1. Add User")
-        print("2. Add Website")
-        print("3. Save Password")
-        print("4. Retrieve Password")
-        print("5. Exit")
+        print("\n|| Password Manager ||")
+        print("1. Password Management")
+        print("2. Website Management")
+        print("3. Credit/Debit Card Management")
+        print("4. Group and Email Integration")
+        print("5. History and Logs")
+        print("6. Exit")
         choice = input("Enter your choice: ")
 
-    closeConnection(conn, database)
-
+        if choice == '1':
+            passManage(conn)
+        if choice == '2':
+            webManage(conn)
+        if choice == '3':
+            cdMan(conn)
+        if choice == '4':
+            gEmail(conn)
+        if choice == '5':
+            history(conn)
+        if choice == '6':
+            closeConnection(conn, database)
 
 if __name__ == '__main__':
     main()

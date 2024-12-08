@@ -268,18 +268,13 @@ def savePass(conn):
     while True:
         print("\n|| Save a New Password ||")
         print("1. Save a new website and website password")
-        # WIP.
-        print("2. Save a new group password")
-        # WIP.
-        print("3. Exit")
+        print("2. Exit")
         
         choice = input("Enter your choice: ")
         
         if choice == '1':
             saveWebPass(conn)
         elif choice == '2':
-            saveGroupPass(conn)
-        elif choice == '3':
             break
         else:
             print("Invalid choice. Please try again.")

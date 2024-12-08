@@ -168,53 +168,31 @@ def passManage(conn):
 def cardManage(conn):
     while True:
         print('\n|| Credit/Debit Card Management ||')
-        print("1. Add a new credit/debit card")
-        # Done.
-        print("2. Delete a credit/debit card")
-        # Done.
-        print("3. Update a credit/debit card")
-        # Done.
-        print("4. Exit")
+        print("1. Retrieve a credit/debit card")
+        print("2. Add a new credit/debit card")
+        print("3. Delete a credit/debit card")
+        print("4. Update a credit/debit card")
+        print("5. Exit")
 
         choice = input("Enter your choice: ")
 
         if choice == '1':
+            retrieveCard(conn)
+        if choice == '2':
             addCard(conn)
-        if choice == '2':
+        if choice == '3':
             deleteCard(conn)
-        if choice == '3':
-            updateCard(conn)
         if choice == '4':
-            break
-
-def gEmail(conn):
-    while True:
-        print('\n|| Group and Email Integration ||')
-        print("1. Retrieve group emails")
-        # Done.
-        print("2. Update group emails")
-        # Done.
-        print("3. Exit")
-
-        choice = input("Enter your choice: ")
-
-        if choice == '1':
-            retrieveEmail(conn)
-        if choice == '2':
-            updateEmail(conn)
-        if choice == '3':
+            updateCard(conn)
+        if choice == '5':
             break
 
 def history(conn):
     while True:
         print('\n|| History and Logs ||')
         print("1. View password history")
-        # Done.
         print("2. View credit/debit card history")
-        # Done.
-        print("3. View group email history")
-        # Done.
-        print("4. Exit")
+        print("3. Exit")
 
         choice = input("Enter your choice: ")
 
@@ -223,8 +201,6 @@ def history(conn):
         if choice == '2':
             viewCardHistory(conn)
         if choice == '3':
-            viewEmailHistory(conn)
-        if choice == '4':
             break
 
 def main():
@@ -260,11 +236,9 @@ def main():
         # Retrieve, save, delete, update passwords
         print("2. Credit/Debit Card Management")
         # Add a new credit card, delete a credit card, update a credit card
-        print("3. Group and Email Integration")
-        # Retrieve and update group emails only
-        print("4. History and Logs")
+        print("3. History and Logs")
         # Retrieve change history
-        print("5. Exit")
+        print("4 . Exit")
         choice = input("Enter your choice: ")
 
         if choice == '1':
@@ -272,10 +246,8 @@ def main():
         if choice == '2':
             cardManage(conn)
         if choice == '3':
-            gEmail(conn)
-        if choice == '4':
             history(conn)
-        if choice == '5':
+        if choice == '4':
             config.username = None
             config.user_id = None
             closeConnection(conn, database)

@@ -42,7 +42,6 @@ def createAccount(conn):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             print("Invalid email format. Please try again.")
             continue
->>>>>>> 8873dbb10089f142feb8255b3c1d25d046a0f91e
         
         try:
             # Check if the email already exists in the database

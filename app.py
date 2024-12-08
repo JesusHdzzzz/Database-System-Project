@@ -146,7 +146,7 @@ def passManage(conn):
         # Done.
         print("3. Save a new password for website/group")
         # WIP.
-        print("4. View password history")
+        print("4. Delete a website or grouppassword")
         print("5. Exit")
 
         choice = input("Enter your choice: ")
@@ -158,10 +158,71 @@ def passManage(conn):
         if choice == '3':
             savePass(conn)
         if choice == '4':
-            viewPassHistory(conn)
+            deletePass(conn)
         if choice == '5':
             break
 
+def cardManage(conn):
+    while True:
+        print('\n|| Credit/Debit Card Management ||')
+        print("1. Add a new credit/debit card")
+        # Done.
+        print("2. Delete a credit/debit card")
+        # Done.
+        print("3. Update a credit/debit card")
+        # Done.
+        print("4. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            addCard(conn)
+        if choice == '2':
+            deleteCard(conn)
+        if choice == '3':
+            updateCard(conn)
+        if choice == '4':
+            break
+
+def gEmail(conn):
+    while True:
+        print('\n|| Group and Email Integration ||')
+        print("1. Retrieve group emails")
+        # Done.
+        print("2. Update group emails")
+        # Done.
+        print("3. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            retrieveEmail(conn)
+        if choice == '2':
+            updateEmail(conn)
+        if choice == '3':
+            break
+
+def history(conn):
+    while True:
+        print('\n|| History and Logs ||')
+        print("1. View password history")
+        # Done.
+        print("2. View credit/debit card history")
+        # Done.
+        print("3. View group email history")
+        # Done.
+        print("4. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            viewPassHistory(conn)
+        if choice == '2':
+            viewCardHistory(conn)
+        if choice == '3':
+            viewEmailHistory(conn)
+        if choice == '4':
+            break
 
 def main():
     database = r"Checkpoint2-dbase.db"
@@ -206,7 +267,7 @@ def main():
         if choice == '1':
             passManage(conn)
         if choice == '2':
-            cdMan(conn)
+            cardManage(conn)
         if choice == '3':
             gEmail(conn)
         if choice == '4':

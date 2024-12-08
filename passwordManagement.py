@@ -284,7 +284,7 @@ def savePass(conn):
         else:
             print("Invalid choice. Please try again.")
         
-#def viewPassHistory(conn):
+#def deletePass(conn):
 #    try:
 #
 #    except sqlite3.Error as e:

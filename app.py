@@ -204,18 +204,50 @@ def createAccount(conn):
     except sqlite3.IntegrityError:
         print("Username already exists!")
         
+import sqlite3
+
 def login(conn):
-    username = input("Enter a new username: ")
+    """Handles user login."""
     try:
-        conn.execute("INSERT INTO Users (username) VALUES (?)", (username,))
-        conn.commit()
-        print("User added successfully!")
-    except sqlite3.IntegrityError:
-        print("Username already exists!")
+        username = input("Enter your username: ").strip()
+        cursor = conn.cursor()
+
+        # Query to fetch the user's stored password based on the username
+        query = """
+            SELECT pass.m_pass 
+            FROM users 
+            JOIN pass ON users.user_id = pass.user_id 
+            WHERE users.username = ?
+        """
+        cursor.execute(query, (username,))
+        user = cursor.fetchone()
+
+        print("Username supplied:", username)
+        print("Is it a tuple?", isinstance((username,), tuple))
+
+
+        if user:
+            # User found; prompt for password
+            stored_password = user[0]  # Extract stored password from the query result
+            password = input("Enter your password: ").strip()
+
+            if password == stored_password:
+                print("Login successful!")
+                return True
+            else:
+                print("Incorrect password. Please try again.")
+        else:
+            # User not found
+            print("Username does not exist. Please try again.")
+    except sqlite3.Error as e:
+        print("Database error: ", e)
+    except Exception as e:
+        print("Unexpected error: ", e)
+
 
 
 def main():
-    database = r"Checkpoint3-dbase.db"
+    database = r"Checkpoint2-dbase.db"
     # create a database connection
     conn = openConnection(database)
     #createTable(conn)
@@ -227,7 +259,8 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == '1':
-            login(conn)
+            if login(conn):
+                break
         elif choice == '2':
             createAccount(conn)
         else:

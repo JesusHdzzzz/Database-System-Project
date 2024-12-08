@@ -2,8 +2,11 @@ import sqlite3
 from sqlite3 import Error
 from create_tables import createTable
 import re
-from passwordManagement import *
 import config
+from passwordManagement import *
+from creditDebitCardMan import *
+from groupEmail import *
+from history import *
 
 def openConnection(_dbFile):
     

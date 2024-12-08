@@ -148,7 +148,7 @@ def passManage(conn):
         # Done.
         print("3. Save a new password for website/group")
         # WIP.
-        print("4. Delete a website or grouppassword")
+        print("4. Delete a website or group password")
         print("5. Exit")
 
         choice = input("Enter your choice: ")
@@ -230,14 +230,14 @@ def main():
 
     
     while True:
-        print("\n|| Password Manager ||")
+        print("\n|| Password Manager Menu ||")
         print("1. Password and Website Management")
         # Retrieve, save, delete, update passwords
         print("2. Credit/Debit Card Management")
         # Add a new credit card, delete a credit card, update a credit card
         print("3. History and Logs")
         # Retrieve change history
-        print("4 . Exit")
+        print("4. Exit")
         choice = input("Enter your choice: ")
 
         if choice == '1':

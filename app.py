@@ -89,7 +89,7 @@ def createAccount(conn):
             conn.commit()
 
             print("Account successfully created with a master password.")
-            return True
+            print("You can now log in with your username and password.")
             break
         except sqlite3.Error as e:
             print("Database error while creating password: ", e)
@@ -139,11 +139,15 @@ def login(conn):
 
 def passManage(conn):
     while True:
-        print('\nPassword Management')
+        print('\n|| Password Management ||')
         print("1. Retrieve a website/group password")
+        # Done.
         print("2. Update a website/group password")
+        # Done.
         print("3. Save a new password for website/group")
+        # WIP.
         print("4. View password history")
+        print("5. Exit")
 
         choice = input("Enter your choice: ")
 
@@ -155,6 +159,8 @@ def passManage(conn):
             savePass(conn)
         if choice == '4':
             viewPassHistory(conn)
+        if choice == '5':
+            break
 
 
 def main():
@@ -206,7 +212,9 @@ def main():
             history(conn)
         if choice == '6':
             config.username = None
+            config.user_id = None
             closeConnection(conn, database)
+            break
 
 if __name__ == '__main__':
     main()

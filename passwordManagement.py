@@ -51,9 +51,16 @@ def retrieveGroupPass(conn):
             JOIN group_pass ON groups.group_id = group_pass.group_id
             WHERE group_pass.user_id = ?
             """, (config.user_id,))
+        
+        # If not in a group, exit
+        if cursor.rowcount == -1:
+            print("You are not in a group.")
+            return
+        
         print("List of groups you have saved passwords for:")
         for row in cursor.fetchall():
             print(f"- {row[0]}")
+
 
         group_name = input("Enter the group name (case-sensitive): ").strip()
 
@@ -151,9 +158,16 @@ def updateGroupPass(conn):
             JOIN group_pass ON groups.group_id = group_pass.group_id
             WHERE group_pass.user_id = ?
             """, (config.user_id,))
+        
+        # If not in a group, exit
+        if cursor.rowcount == -1:
+            print("You are not in a group.")
+            return
+        
         print("List of groups you have saved passwords for:")
         for row in cursor.fetchall():
             print(f"- {row[0]}")
+
 
         group_name = input("Enter the group name (case-sensitive): ").strip()
 

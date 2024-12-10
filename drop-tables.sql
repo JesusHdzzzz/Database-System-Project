@@ -1,0 +1,12 @@
+DROP TABLE cards;
+DROP TABLE devloc;
+DROP TABLE group_link;
+DROP TABLE group_pass;
+DROP TABLE group_u;
+DROP TABLE groups;
+DROP TABLE history;
+DROP TABLE pass;
+DROP TABLE user_web;
+DROP TABLE web;
+DROP TABLE web_pass;
+DROP TABLE users;

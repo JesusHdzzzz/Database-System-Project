@@ -1,6 +1,6 @@
 def createTable(_conn):
-    print("++++++++++++++++++++++++++++++++++")
-    print("Create table")
+    # print("++++++++++++++++++++++++++++++++++")
+    # print("Create table")
     
     try:
 
@@ -136,9 +136,9 @@ def createTable(_conn):
             FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE -- Cascade delete when a user is deleted
         );""")
         _conn.commit()
-        print("success")    
+        # print("success")    
     except Error as e:
         _conn.rollback()
         print(e)
 
-    print("++++++++++++++++++++++++++++++++++")
+    # print("++++++++++++++++++++++++++++++++++")

@@ -146,25 +146,25 @@ def passManage(conn):
         # Done.
         print("2. Update a website/group password")
         # Done.
-        print("3. Save a new password for website/group")
+        print("3. Save a new password for website")
         # WIP.
-        print("4. Delete a website or group password")
+        print("4. Delete a website password")
         print("5. Exit")
 
         choice = input("Enter your choice: ")
 
         if choice == '1':
-            retrievePass(conn)
+            retrievePassMenu(conn)
         if choice == '2':
-            updatePass(conn)
+            updatePassMenu(conn)
         if choice == '3':
-            savePass(conn)
+            savePassMenu(conn)
         if choice == '4':
-            deletePass(conn)
+            deletePassMenu(conn)
         if choice == '5':
             break
 
-def cardManage(conn):
+def cardManageMenu(conn):
     while True:
         print('\n|| Credit/Debit Card Management ||')
         print("1. Retrieve a credit/debit card")
@@ -186,7 +186,7 @@ def cardManage(conn):
         if choice == '5':
             break
 
-def history(conn):
+def historyMenu(conn):
     while True:
         print('\n|| History and Logs ||')
         print("1. View password history")
@@ -210,7 +210,7 @@ def main():
     
     if conn:
         createTable(conn)
-        print("Tables are ready to use.")
+        print("\nTables are ready to use.")
 
     while True:
         print("1. Log in")
@@ -243,9 +243,9 @@ def main():
         if choice == '1':
             passManage(conn)
         if choice == '2':
-            cardManage(conn)
+            cardManageMenu(conn)
         if choice == '3':
-            history(conn)
+            historyMenu(conn)
         if choice == '4':
             config.username = None
             config.user_id = None

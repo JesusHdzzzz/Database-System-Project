@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 import config
+import datetime
 
 def retrieveWebPass(conn):
     try:
@@ -44,52 +45,51 @@ def retrieveGroupPass(conn):
     try:
         cursor = conn.cursor()
 
-        # Print all groups that the user has saved passwords for
+        # Step 1: Print all groups the user has saved passwords for
         cursor.execute("""
             SELECT groups.group_name
             FROM groups
             JOIN group_pass ON groups.group_id = group_pass.group_id
             WHERE group_pass.user_id = ?
-            """, (config.user_id,))
+        """, (config.user_id,))
         
-        # If not in a group, exit
-        if cursor.rowcount == -1:
-            print("You are not in a group.")
-            return
-        
-        print("List of groups you have saved passwords for:")
-        for row in cursor.fetchall():
-            print(f"- {row[0]}")
+        groups = cursor.fetchall()
 
+        # Check if the user belongs to any groups
+        if not groups:
+            print("You are not in any group.")
+            return
+
+        print("List of groups you have saved passwords for:")
+        for row in groups:
+            print(f"- {row[0]}")
 
         group_name = input("Enter the group name (case-sensitive): ").strip()
 
-        cursor = conn.cursor()
+        # Step 2: Retrieve the password for the group
+        cursor.execute("""
+            SELECT group_email_pass 
+            FROM group_pass
+            WHERE user_id = ? AND group_id = (
+                SELECT group_id FROM groups WHERE group_name = ?
+            )
+        """, (config.user_id, group_name))
 
-        # Execute the query to retrieve the password for the given user and group
-        cursor.execute("""SELECT group_email_pass 
-            FROM group_pass, groups
-            WHERE user_id = ? 
-            AND group_pass.group_id = groups.group_id
-            AND group_name = ?""", (config.user_id, group_name))
         group_pass = cursor.fetchone()
 
-        print("config.user_id:", config.user_id)
-        print("group_name:", group_name)
-
-        # Check if a password was found and print it
-        if group_pass:    
-            print(f"Group password for user {config.username} in group {group_name}: {group_pass[0]}")
+        if group_pass:
+            print(f"Group password for {config.username} in group {group_name}: {group_pass[0]}")
         else:
-            print("No password found for the given user ID and group name.")
+            print("No password found for the given user and group name.")
 
     except sqlite3.Error as e:
-        print("Database error: ", e)
+        print("Database error:", e)
+
 
 """
 Retrieve passwords for both websites and groups for a specific user
 """
-def retrievePass(conn):
+def retrievePassMenu(conn):
         
     while True:
         print("\n|| Retrieve a Password ||")
@@ -141,8 +141,19 @@ def updateWebPass(conn):
             )
             """, (input("Enter the new password: "), config.user_id, website_name))
 
+        # Add into history table
+        cursor.execute("""
+        INSERT INTO history (user_id, action_type, action_details, action_timestamp)
+        VALUES (?, ?, ?, ?);
+        """, (
+            config.user_id,
+            "Password change",
+            f"Updated {website_name} password",
+            datetime.datetime.now().strftime("%Y-%m-%d")
+        ))
+
         conn.commit()
-        print("Password updated successfully.")
+        print("Password updated successfully stored in History and Logs.")
 
     except sqlite3.Error as e:
         print("Database error: ", e)
@@ -151,47 +162,69 @@ def updateGroupPass(conn):
     try:
         cursor = conn.cursor()
 
-        # Print all groups that the user has saved passwords for
+        # Step 1: Retrieve groups the user belongs to
         cursor.execute("""
             SELECT groups.group_name
             FROM groups
             JOIN group_pass ON groups.group_id = group_pass.group_id
             WHERE group_pass.user_id = ?
-            """, (config.user_id,))
-        
-        # If not in a group, exit
-        if cursor.rowcount == -1:
-            print("You are not in a group.")
+        """, (config.user_id,))
+        groups = cursor.fetchall()
+
+        # Check if the user belongs to any groups
+        if not groups:
+            print("You are not in any group.")
             return
-        
+
         print("List of groups you have saved passwords for:")
-        for row in cursor.fetchall():
+        for row in groups:
             print(f"- {row[0]}")
 
-
+        # Ask for the group name to update the password
         group_name = input("Enter the group name (case-sensitive): ").strip()
 
-        cursor = conn.cursor()
+        # Step 2: Check if the group exists
+        cursor.execute("""
+            SELECT group_id FROM groups WHERE group_name = ?
+        """, (group_name,))
+        group_row = cursor.fetchone()
 
-        # Execute the query to update the password for the given user and group
+        if not group_row:
+            print(f"No group found with the name '{group_name}'.")
+            return
+
+        group_id = group_row[0]
+
+        # Ask for the new password
+        new_password = input("Enter the new password: ").strip()
+
+        # Step 3: Update the password in group_pass table
         cursor.execute("""
             UPDATE group_pass
             SET group_email_pass = ?
-            WHERE user_id = ?
-            AND group_id = (
-                SELECT group_id
-                FROM groups
-                WHERE group_name = ?
-            )
-            """, (input("Enter the new password: "), config.user_id, group_name))
+            WHERE user_id = ? AND group_id = ?
+        """, (new_password, config.user_id, group_id))
+
+        # Insert into history table
+        cursor.execute("""
+            INSERT INTO history (user_id, action_type, action_details, action_timestamp)
+            VALUES (?, ?, ?, ?)
+        """, (
+            config.user_id,
+            "Password change",
+            f"Updated password for group {group_name}",
+            datetime.datetime.now().strftime("%Y-%m-%d")
+        ))
 
         conn.commit()
-        print("Password updated successfully.")
+
+        print("Password updated successfully and logged in history.")
 
     except sqlite3.Error as e:
-        print("Database error: ", e)
+        print("Database error:", e)
 
-def updatePass(conn):
+
+def updatePassMenu(conn):
     while True:
         print("\n|| Password Management ||")
         print("1. Update a website password")
@@ -224,7 +257,7 @@ def saveWebPass(conn):
         """, (config.user_id,))
         saved_websites = cursor.fetchall()
 
-        print("List of websites you have saved passwords for:")
+        print("\nList of websites you have saved passwords for:")
         if saved_websites:
             for row in saved_websites:
                 print(f"- {row[0]}")
@@ -233,6 +266,7 @@ def saveWebPass(conn):
 
         # Get website details
         website_name = input("Enter the website name: ").strip().lower()
+        website_url = input("Enter the website URL: ").strip()
 
         # Check if the website exists
         cursor.execute("""
@@ -247,9 +281,9 @@ def saveWebPass(conn):
         else:
             # Insert new website
             cursor.execute("""
-                INSERT INTO web (website_name)
-                VALUES (?)
-            """, (website_name,))
+                INSERT INTO web (website_name, website_url)
+                VALUES (?, ?)
+            """, (website_name, website_url))
             conn.commit()
             website_id = cursor.lastrowid  # New website_id
 
@@ -272,16 +306,28 @@ def saveWebPass(conn):
         """, (config.user_id, website_id, web_pass))
         conn.commit()
 
-        print("Password saved successfully.")
+        # Add into history table
+        cursor.execute("""
+        INSERT INTO history (user_id, action_type, action_details, action_timestamp)
+        VALUES (?, ?, ?, ?);
+        """, (
+            config.user_id,
+            "Password added",
+            f"Added password for {website_name}",
+            datetime.datetime.now().strftime("%Y-%m-%d")
+        ))
+        conn.commit()
+
+        print("Password saved successfully stored in History and Logs.")
 
     except sqlite3.Error as e:
         print("Database error:", e)
 
 
-def savePass(conn):
+def savePassMenu(conn):
     while True:
         print("\n|| Save a New Password ||")
-        print("1. Save a new website and website password")
+        print("1. Save a new website password")
         print("2. Exit")
         
         choice = input("Enter your choice: ")
@@ -296,7 +342,7 @@ def savePass(conn):
 def deleteWebPass(conn):
     try:
         cursor = conn.cursor()
-        # Print all websites the user has saved passwords for        
+
         # Print all websites the user has saved passwords for
         cursor.execute("""
             SELECT web.website_name
@@ -324,12 +370,35 @@ def deleteWebPass(conn):
         """, (website_name,))
         result = cursor.fetchone()
 
-        print(result)
+        # Add into history table
+        cursor.execute("""
+        INSERT INTO history (user_id, action_type, action_details, action_timestamp)
+        VALUES (?, ?, ?, ?);
+        """, (
+            config.user_id,
+            "Password deleted",
+            f"Deleted password for {website_name}",
+            datetime.datetime.now().strftime("%Y-%m-%d")
+        ))
+        conn.commit()
+
+        # If the website exists, delete the password
+        if result:
+            website_id = result[0]
+            cursor.execute("""
+                DELETE FROM web_pass
+                WHERE user_id = ? AND website_id = ?
+            """, (config.user_id, website_id))
+            conn.commit()
+            print("Password deleted successfully and stored in History and Logs.")
+        else:
+            print("Website not found.")
+
         
     except sqlite3.Error as e:
         print("Database error:", e)
 
-def deletePass(conn):
+def deletePassMenu(conn):
     while True:
         print("\n|| Delete a Password ||")
         print("1. Delete a website password")

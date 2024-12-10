@@ -40,7 +40,7 @@ CREATE TABLE cards (
     card_number TEXT NOT NULL,
     card_type TEXT NOT NULL CHECK (card_type IN ('Visa', 'MasterCard', 'American Express')),
     expiration_date TEXT NOT NULL,
-    cvv TEXT NOT NULL,
+    cvv TEXT,
     billing_address TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(user_id) REFERENCES Users(user_id) ON DELETE CASCADE

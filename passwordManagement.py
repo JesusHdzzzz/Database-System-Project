@@ -110,6 +110,22 @@ def retrieveAllPass(conn):
         for row in cursor.fetchall():
             print(f"{row[1].ljust(website_width)} | {row[0].ljust(password_width)}")
 
+        # Print all group passwords for the given user
+        cursor.execute("""
+            SELECT group_email_pass, groups.group_name
+            FROM group_pass
+            JOIN groups ON group_pass.group_id = groups.group_id
+            WHERE group_pass.user_id = ?
+        """, (config.user_id,))
+
+        # Print a header for group passwords
+        print("\nGroup Passwords:")
+        print(f"{'Group Name'.ljust(website_width)} | {'Password'.ljust(password_width)}")
+        print("-" * (website_width + password_width + 3))  # Separator line
+
+        # Print each group password row
+        for row in cursor.fetchall():
+            print(f"{row[1].ljust(website_width)} | {row[0].ljust(password_width)}")
 
     except sqlite3.Error as e:
         print("Database error:", e)

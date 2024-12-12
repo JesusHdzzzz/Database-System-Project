@@ -86,6 +86,34 @@ def retrieveGroupPass(conn):
         print("Database error:", e)
 
 
+def retrieveAllPass(conn):
+    try:
+        cursor = conn.cursor()
+
+        # Execute the query to retrieve all passwords for the given user
+        cursor.execute("""
+            SELECT web_pass.web_pass, web.website_name
+            FROM web_pass
+            JOIN web ON web_pass.website_id = web.website_id
+            WHERE web_pass.user_id = ?
+        """, (config.user_id,))
+
+        # Define column widths for alignment
+        website_width = 20
+        password_width = 20
+
+        # Print a header with aligned columns
+        print(f"{'Website Name'.ljust(website_width)} | {'Password'.ljust(password_width)}")
+        print("-" * (website_width + password_width + 3))  # Separator line
+
+        # Print each row with aligned columns
+        for row in cursor.fetchall():
+            print(f"{row[1].ljust(website_width)} | {row[0].ljust(password_width)}")
+
+
+    except sqlite3.Error as e:
+        print("Database error:", e)
+
 """
 Retrieve passwords for both websites and groups for a specific user
 """
@@ -97,7 +125,8 @@ def retrievePassMenu(conn):
         # Done.
         print("2. Retrieve a group password")
         # Done.
-        print("3. Exit")
+        print("3. Retrieve all your passwords")
+        print("4. Exit")
         
         choice = input("Enter your choice: ")
         
@@ -106,6 +135,8 @@ def retrievePassMenu(conn):
         elif choice == '2':
             retrieveGroupPass(conn)
         elif choice == '3':
+            retrieveAllPass(conn)
+        elif choice == '4':
             break
         else:
             print("Invalid choice. Please try again.")
@@ -266,7 +297,19 @@ def saveWebPass(conn):
 
         # Get website details
         website_name = input("Enter the website name: ").strip().lower()
-        website_url = input("Enter the website URL: ").strip()
+
+        # Check if the website has a link already
+        cursor.execute("""
+            SELECT website_url
+            FROM web
+            WHERE website_name = ?
+        """, (website_name,))
+        website_url = cursor.fetchone()
+
+        if website_url:
+            website_url = website_url[0]
+        else:
+            website_url = input("Enter the website URL: ").strip()
 
         # Check if the website exists
         cursor.execute("""
@@ -304,6 +347,13 @@ def saveWebPass(conn):
             INSERT INTO web_pass (user_id, website_id, web_pass)
             VALUES (?, ?, ?)
         """, (config.user_id, website_id, web_pass))
+        conn.commit()
+
+        # Create link for the website and user in user_web table
+        cursor.execute("""
+            INSERT INTO user_web (user_id, website_id)
+            VALUES (?, ?)
+        """, (config.user_id, website_id))
         conn.commit()
 
         # Add into history table
@@ -369,6 +419,17 @@ def deleteWebPass(conn):
             WHERE website_name = ?
         """, (website_name,))
         result = cursor.fetchone()
+
+        # Delete link between user and website in user_web table
+        cursor.execute("""
+            DELETE FROM user_web
+            WHERE user_id = ? AND website_id = (
+                SELECT website_id
+                FROM web
+                WHERE website_name = ?
+            )
+        """, (config.user_id, website_name))
+        conn.commit()
 
         # Add into history table
         cursor.execute("""

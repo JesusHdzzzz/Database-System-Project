@@ -158,10 +158,12 @@ def updateCard(conn):
         cursor.execute("SELECT card_number FROM cards WHERE card_number = ?", (card_number,))
         existing_card = cursor.fetchone()
 
+        # Validate card number
         if not existing_card:
             print("\nCard number does not exist. Please try again.")
             return 
 
+        # Validate card number
         if not card_number.isdigit() or len(card_number) != 16:
             print("\nInvalid card number. Please try again.")
             return

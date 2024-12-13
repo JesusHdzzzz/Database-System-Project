@@ -9,17 +9,17 @@ from history import *
 
 def openConnection(_dbFile):
     
-    print("++++++++++++++++++++++++++++++++++")
-    print("Open database: ", _dbFile)
+    #print("++++++++++++++++++++++++++++++++++")
+    #print("Open database: ", _dbFile)
 
     conn = None
     try:
         conn = sqlite3.connect(_dbFile)
-        print("success")
+        #print("success")
     except Error as e:
         print(e)
 
-    print("++++++++++++++++++++++++++++++++++")
+    #print("++++++++++++++++++++++++++++++++++")
 
     return conn
 
@@ -143,11 +143,8 @@ def passManage(conn):
     while True:
         print('\n|| Password Management ||')
         print("1. Retrieve a website/group password")
-        # Done.
         print("2. Update a website/group password")
-        # Done.
         print("3. Save a new password for website")
-        # WIP.
         print("4. Delete a website password")
         print("5. Exit")
 
